@@ -33,6 +33,10 @@ public class LoginPage extends BasePage{
     public AccountsPage verifyLogin(){
         wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.id("trial-subscribe-now")));
         return new AccountsPage(driver);
+    }
 
+    public ContactsPage goToContacts(){
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.id("trial-subscribe-now")));
+        return new ContactsPage(driver);
     }
 }
