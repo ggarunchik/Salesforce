@@ -1,6 +1,8 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class BasePage {
@@ -16,6 +18,18 @@ public abstract class BasePage {
     public abstract BasePage isPageOpened();
 
     public abstract BasePage openPage();
+
+    public void waitForElementToDisappear(By elementBy) {
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(elementBy));
+    }
+
+    public void waitForElementVisibility(By elementBy) {
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(elementBy));
+    }
+
+    public boolean isElementPresent(By elementBy) {
+        return elementBy != null;
+    }
 
 
 }

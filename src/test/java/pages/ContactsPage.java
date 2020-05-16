@@ -6,15 +6,14 @@ import elements.TextInput;
 import models.Contact;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.testng.Assert;
 
-public class ContactsPage extends BasePage{
+public class ContactsPage extends BasePage {
     private static final String NEW_BUTTON_CSS = "[title=New]";
     private static final String SAVE_BUTTON_CSS = "[title=Save]";
     private static final String DROPDOWN_INPUT_CSS = ".uiAutocompleteOption";
     private static final String SUCCESS_TOAST_XPATH = "//div[@class='slds-theme--success slds-notify--toast slds-notify slds-notify--toast forceToastMessage']";
+    private static final String CONTACT_PAGE_XPATH = "//a[@title='Contacts']";
+    private static final String DUPLICATE_POPUP_XPATH = "//div[@class='slds-col slds-align-middle']";
 
 
     public ContactsPage(WebDriver driver) {
@@ -29,12 +28,12 @@ public class ContactsPage extends BasePage{
     @Override
     public BasePage openPage() {
         driver.get("https://ap17.lightning.force.com/lightning/o/Contact/list?filterName=Recent");
+        driver.findElement(By.xpath(CONTACT_PAGE_XPATH)).click();
         return this;
     }
 
     public ContactsPage clickNew() {
         driver.findElement(By.cssSelector(NEW_BUTTON_CSS)).click();
-      //  wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(SAVE_BUTTON_CSS)));
         return this;
     }
 
@@ -70,15 +69,15 @@ public class ContactsPage extends BasePage{
 
     public void clickSave(Contact contact) {
         driver.findElement(By.cssSelector(SAVE_BUTTON_CSS)).click();
-       // verifyToast(contact);
+        waitForElementToDisappear(By.cssSelector(SAVE_BUTTON_CSS));
     }
 
-    public void verifyToast(Contact contact) {
-        String currentToastMessage = driver.findElement(By.xpath(SUCCESS_TOAST_XPATH)).getText();
-        String expectedToastMessage = "contact.getLastName() " + " " + " was saved";
-      //  Assert.assertEquals(currentToastMessage, expectedToastMessage);
-      //  Assert.assertTrue(currentToastMessage.contains(expectedToastMessage));
-
-
+    public void checkForDuplicatePopup(Contact contact) {
+        if(isElementPresent(By.xpath(DUPLICATE_POPUP_XPATH))) {
+            driver.findElement(By.cssSelector(SAVE_BUTTON_CSS)).click();
+            waitForElementToDisappear(By.cssSelector(SAVE_BUTTON_CSS));
+        }else {
+            driver.findElement(By.cssSelector(SAVE_BUTTON_CSS)).click();
+        }
     }
 }
